@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="Django default" uuid="11e2426a-5a10-44f4-9f47-12b183854d0c">
-    <database-info product="SQLite" version="3.6.23.1" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="pure"/>
+    <database-info product="SQLite" version="3.7.6.3" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
     <table name="auth_group" schema="" catalog="" type="TABLE">

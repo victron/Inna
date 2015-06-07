@@ -37,4 +37,4 @@ class Dreams_admin_view(admin.ModelAdmin):
 admin.site.register(User, User_admin_view)
 admin.site.register(Dreams, Dreams_admin_view)
 # admin.AdminSite.site_header = 'rrrrr'
-admin.site.site_header = 'uuuuu'
+admin.site.site_header = '!!!!!!! Admin page !!!!!!!'

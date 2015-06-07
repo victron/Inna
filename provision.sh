@@ -13,6 +13,7 @@ apt-get install -y python-setuptools
 easy_install pip
 apt-get install -y python-django
 apt-get install -y sqlite3
+apt-get install -y virtualenvwrapper
 # apt-get install -y vsftpd
 
 # pip install paramiko PyYAML Jinja2 httplib2

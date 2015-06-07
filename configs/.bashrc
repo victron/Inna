@@ -114,4 +114,6 @@ if ! shopt -oq posix; then
 fi
 
 cd /vagrant
+export WORKON_HOME=/vagrant/.virtualenvs
+
 
