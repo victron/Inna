@@ -81,6 +81,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", run: "always",  inline: <<-SHELL
   echo ""
   SHELL
+  # port sorwarding for ssh maintanence
+  config.vm.network :forwarded_port, guest: 22, host: 2200, id: 'ssh'
   config.vm.network "forwarded_port", guest_ip: "127.0.0.1", guest: 8000, host: 8001, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 8080, host: 8080
   config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "127.0.0.1"

@@ -1,0 +1,12 @@
+{% if dream_details %}
+    <ul>
+{#    {% for key in dream_details%}#}
+        <li>dream_subject -- {{ dream_details.dream_subject }}</li>
+        <li>dream_text ----- {{ dream_details.dream_text }}</li>
+        <li>dream_date ----- {{ dream_details.dream_date }}</li>
+        <li>user ----------- {{ dream_details.user }}</li>
+{#    {% endfor %}#}
+    </ul>
+{% else %}
+    <p>No dream</p>
+{% endif %}

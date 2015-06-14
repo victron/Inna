@@ -12,14 +12,14 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Remote Python 2.7.6 Vagrant VM at ~/scripts/python/Inna (/vagrant/.virtualenvs/django/bin/python)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 2.7.6 (sftp://vagrant@127.0.0.1:2200/vagrant/.virtualenvs/django/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/dreams/pools/templates" />
+        <option value="$MODULE_DIR$/dreams/templates" />
       </list>
     </option>
   </component>

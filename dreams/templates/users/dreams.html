@@ -1,0 +1,9 @@
+{% if all_dreams %}
+    <ul>
+    {% for dream in all_dreams %}
+        <li><a href="{% url 'users:dream_details' dream.id %}">{{ dream.dream_subject }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No dreams</p>
+{% endif %}
