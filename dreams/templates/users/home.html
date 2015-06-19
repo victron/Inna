@@ -1,2 +1,5 @@
-
+{% csrf_token %}
 <h1>Home page {{ user.get_username }} ===== {{ user.id }}</h1>
+<a href="{% url 'users:dreams' %}">My dreams</a>
+<a href="{% url 'users:create_dream' %}">New Dream</a>
+<a href="{% url 'users:logout' %}">Logout</a>

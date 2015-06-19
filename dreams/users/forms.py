@@ -1,7 +1,13 @@
 __author__ = 'vic'
 
 from django import forms
+from django.core.exceptions import ValidationError
+from models import Dreams
 
-class LoginForm(forms.Form):
-    user_name = forms.CharField(label='login', max_length=50)
-    user_password = forms.PasswordInput()
+class NewDreamForm(forms.Form):
+    class Meta:
+        model = Dreams
+
+
+
+

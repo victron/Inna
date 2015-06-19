@@ -7,7 +7,7 @@ from django.utils import timezone
 class Dreams(models.Model):
     dream_subject = models.CharField('subject of dream', max_length = 255)
     dream_text = models.TextField('dream description')
-    dream_date = models.DateField('morning date', default=timezone.now )
+    dream_date = models.DateTimeField('morning date', default=timezone.now )
     user = models.ForeignKey(User)
 
     def __str__(self):
