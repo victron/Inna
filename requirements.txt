@@ -1,0 +1,4 @@
+# (venv:tutorial)~/tutorial$ pip install -U -r requirements.txt
+Django
+django-registration-redux
+

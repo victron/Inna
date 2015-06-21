@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="">
+    <title>Edit</title>
+</head>
+<body>
+<h1>Edit dream</h1>
+  <form action="#" method="post">
+  {% csrf_token %}
+    {% if form.errors %}
+        <h3>Please enter correct data:</h3>
+      <p class="error"> {{ form.errors }}</p>
+    {% endif %}
+
+    <label for="id_dream_subject">Subject:</label> {{ form.dream_subject }}
+    <label for="id_dream_text">Text:</label> {{ form.dream_text }}
+    <label for="id_dream_date">Date:</label> {{ form.dream_date }}
+    <input type="submit" value="Confirm" />
+  </form>
+</body>
+</html>

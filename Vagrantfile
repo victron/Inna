@@ -74,10 +74,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # end
 #   config.vm.provision "bootstrap", type: "shell", path: "provision.sh"
   # before ver. 1.7.0
+  config.vm.hostname = 'dream'
   config.vm.provision "shell", path: "provision.sh"
   config.vm.provision "file", source: "configs/.bashrc", destination: ".bashrc"
   # ---------- always -----------------
-  config.vm.provision "file", run: "always", source: "~/.config/pulse/cookie", destination: "~/.config/pulse/cookie"
+  # config.vm.provision "file", run: "always", source: "~/.config/pulse/cookie", destination: "~/.config/pulse/cookie"
   config.vm.provision "shell", run: "always",  inline: <<-SHELL
   echo ""
   SHELL

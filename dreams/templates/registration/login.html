@@ -19,7 +19,7 @@
 {% endif %}
 <form action="." method="post">
     {% csrf_token %}
-    {{ form }}
+    {{ form.as_p }}
     <input type="submit" value="Submit" />
     {% if next %}
         <input type="hidden" name="next" value="{{next}}" />

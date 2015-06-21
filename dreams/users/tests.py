@@ -43,7 +43,7 @@ class DreamsTests(TestCase):
             )
 
     def create_dream(self, user_dream_id=1, username='test'):
-        self.test_create_user(username)     # include previous test
+        self.create_user(username)     # include previous test
         user = User.objects.get(username=username)
         dream = Dreams(dream_subject='user-' + username + 'user_dream_id-' + str(user_dream_id) + 'test_dream',
                        dream_text ='user-' + username + 'user_dream_id-'+ str(user_dream_id) + 'oooo XXXXX ogooooo',
@@ -127,21 +127,37 @@ class ViewsTests(DreamsTests):
         """
         If no  exist, an appropriate message should be displayed.
         """
+
         response = self.client.get(reverse('users:dreams'))
         # self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse('users:login') + '?next=' + reverse('users:dreams'), msg_prefix=str(response))
         # self.assertContains(response, "No dreams")
         self.assertIsNone(response.context)
 
-    def test_view_dream_id(self, pk=1):
+    def test_view_dream_deatail(self, pk=1):
         """dream id is equal to number in url"""
 
         self.create_env()
-        response = self.client.get(reverse('users:dream_details',  args=(Dreams.objects.get(pk=pk).id,)))
+        all_dreams_ids = [ i.id for i in Dreams.objects.all()]
+        # non authtoritaid user, acces to dream, should be redirected to login
+        for dream_id in all_dreams_ids:
+            response = self.client.get(reverse('users:dream_details',  args=(dream_id,)))
+            self.assertEquals(response.status_code, 302, msg=str(response.status_code))
+            self.assertRedirects(response, reverse('users:login') + '?next=/users/' + str(dream_id) + '/dream')
+        for username in usernames:
+            user_dreams_ids = [ i.id for i in Dreams.objects.filter(user__username=username)]
+            foreign_dreams = list(set(all_dreams_ids) - set(user_dreams_ids))
+            response = self.client.post(reverse('users:login'), {'username' : username,
+                                                            'password' : 'password' + username})
+            # own dreams should be available
+            for dream_id in user_dreams_ids:
+                response = self.client.get(reverse('users:dream_details',  args=(dream_id,)))
+                self.assertEquals(response.status_code, 200, msg=str(response.status_code))
+            # foreign dreams 'forbidden'
+            for dream_id in foreign_dreams:
+                response = self.client.get(reverse('users:dream_details',  args=(dream_id,)))
+                self.assertEquals(response.status_code, 403, msg=str(response.status_code))
 
-        self.assertEquals(response.status_code, 200, msg='wrog')
-        self.assertEquals(response.context['dream_details'],
-                          Dreams.objects.get(pk=pk))
 
     def test_login_view(self):
         self.create_env()

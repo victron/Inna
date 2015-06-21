@@ -3,10 +3,12 @@ from django import forms
 import forms
 # Create your views here.
 from django.views import generic
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import  views
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
@@ -123,18 +125,59 @@ class DreamDetails(LoggedInMixin, DreamsOwnerMixin, generic.DetailView):
     context_object_name = 'dream_details'
 
 
-class CreateDreamtView( generic.CreateView):
+class CreateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, generic.CreateView):
 
     model = Dreams
     template_name = 'users/create_dream.html'
+    success_url = reverse_lazy('users:dreams')
     # form_class = forms.NewDreamForm
+    success_message = "Dream %(dream_subject)s was created successfully"
     fields = ['dream_subject', 'dream_text', 'dream_date']
+
+
+    # def get_success_url(self):
+    #     return reverse('users:dreams')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(CreateDreamtView, self).form_valid(form)
 
+class UpdateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, generic.UpdateView):
 
+    model = Dreams
+    template_name = 'users/update_dream.html'
+    success_url = reverse_lazy('users:dreams')
+    success_message = "Dream %(dream_subject)s was updated successfully"
+    # context_object_name = 'dream_details'
+    # form_class = forms.NewDreamForm
+    fields = ['dream_subject', 'dream_text']
+
+
+class DeleteDreamView(LoggedInMixin, DreamsOwnerMixin,  generic.DeleteView):
+    model = Dreams
+    template_name = 'users/delete_dream.html'
+    success_url = reverse_lazy('users:dreams')
+
+    # success_message = "Dream  was deleted successfully"
+
+
+    # def get_success_message(self, cleaned_data):
+    #     return self.success_message % dict(cleaned_data,
+    #                                        dream_subject=self.object.dream_subject)
+
+    def delete(self, request, *args, **kwargs):
+        message = 'Dream ' + self.get_object().dream_subject +  ' was deleted successfully!'
+        messages.success(self.request, message)
+        # messages.success(self.request, self.success_message)
+        return super(DeleteDreamView, self).delete(request, *args, **kwargs)
+
+    # def get_object(self):
+    #     object = super(DeleteDreamView, self).get_object()
+    #
+    #     return object
+    #
+    # def get_queryset(self):
+    #     return self.request.
 
 
 

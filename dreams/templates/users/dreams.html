@@ -1,7 +1,19 @@
+<h1>Current user {{ user.username }}</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% if all_dreams %}
     <ul>
     {% for dream in all_dreams %}
-        <li><a href="{% url 'users:dream_details' dream.id %}">{{ dream.dream_subject }}</a></li>
+        <li><a href="{% url 'users:dream_details' dream.id %}">{{ dream.dream_subject }}</a>
+            <a href="{% url 'users:update_dream' dream.id %}">Edit</a>
+            <a href="{% url 'users:delete_dream' dream.id %}">Delete</a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
