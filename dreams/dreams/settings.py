@@ -24,7 +24,8 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ec2-52-28-131-161.eu-central-1.compute.amazonaws.com',
+                 ]
 
 
 # Application definition
@@ -61,8 +62,16 @@ WSGI_APPLICATION = 'dreams.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'pools.db'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'pools.db'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dreamdb',                      # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': 'ubuntu',
+        'PASSWORD': 'password1',
+        'HOST': 'localhost',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+        'PORT': '',                      # Set to empty string for default.
+
     }
 }
 
@@ -100,13 +109,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-LOGIN_URL = 'users:login'
+LOGIN_URL = 'auth_login'
 LOGIN_REDIRECT_URL = 'users:home'
 LOGOUT_REDIRECT_URL = 'users:welcome'
 
 REGISTRATION_OPEN = True                # If True, users can register
 ACCOUNT_ACTIVATION_DAYS = 7     # One-week activation window; you may, of course, use a different value.
-REGISTRATION_AUTO_LOGIN = True  # If True, the user will be automatically logged in.
+REGISTRATION_AUTO_LOGIN = False  # If True, the user will be automatically logged in.
                                 # and are trying to access pages requiring authentication
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # send e-mail to console, for develop
+
+DEFAULT_FROM_EMAIL = 'workorbit@example.com'
+# if DEBUG:
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # send e-mail to console, for develop
 SITE_ID = 1
+AUTH_USER_EMAIL_UNIQUE = True

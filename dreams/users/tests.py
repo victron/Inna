@@ -12,7 +12,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 
 from django.test import LiveServerTestCase
-from selenium.webdriver.firefox.webdriver import WebDriver
+# from selenium.webdriver.firefox.webdriver import WebDriver
 # import selenium
 
 # data for test enviroment
@@ -60,15 +60,17 @@ class DreamsTests(TestCase):
 
     def registration(self, username):
         # GET
-        response = self.client.get(reverse('users:register'))
+        response = self.client.get(reverse('registration_register'))
         self.assertEquals(response.status_code, 200)
         with self.assertTemplateUsed('users/registration.html'):
             render_to_string('users/registration.html')
         # POST
-        response = self.client.post(reverse('users:register'), {'username' : username,
+        response = self.client.post(reverse('registration_register'), {'username' : username,
                                                                 'password1' : 'password' + username,
                                                                 'password2' : 'password' + username})
-        self.assertRedirects(response, reverse('users:login'))
+        self.assertRedirects(response, reverse('auth_login'))
+        # with self.assertTemplateUsed('registration/registration_complete.html'):
+        #         render_to_string('registration/registration_complete.html')
 
     def create_dreams(self, username, dream_subj):
 
@@ -96,14 +98,15 @@ class DreamsTests(TestCase):
 
         # register user and dreams
         for i in usernames:
-            self.registration(i)
+            # self.registration(i)
+            self.create_user(i)
             # create dreams for every user
             for add_subj in ['1', '2', '3']:
                 self.create_dreams(i, add_subj)
 
     def dreams_view(self, username):
         #
-        response = self.client.post(reverse('users:login'), {'username' : username,
+        response = self.client.post(reverse('auth_login'), {'username' : username,
                                                             'password' : 'password' + username})
         response = self.client.get(reverse('users:dreams'))
         # check number of dreams from create_env()
@@ -130,7 +133,7 @@ class ViewsTests(DreamsTests):
 
         response = self.client.get(reverse('users:dreams'))
         # self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, reverse('users:login') + '?next=' + reverse('users:dreams'), msg_prefix=str(response))
+        self.assertRedirects(response, reverse('auth_login') + '?next=' + reverse('users:dreams'), msg_prefix=str(response))
         # self.assertContains(response, "No dreams")
         self.assertIsNone(response.context)
 
@@ -143,11 +146,11 @@ class ViewsTests(DreamsTests):
         for dream_id in all_dreams_ids:
             response = self.client.get(reverse('users:dream_details',  args=(dream_id,)))
             self.assertEquals(response.status_code, 302, msg=str(response.status_code))
-            self.assertRedirects(response, reverse('users:login') + '?next=/users/' + str(dream_id) + '/dream')
+            self.assertRedirects(response, reverse('auth_login') + '?next=/users/' + str(dream_id) + '/dream')
         for username in usernames:
             user_dreams_ids = [ i.id for i in Dreams.objects.filter(user__username=username)]
             foreign_dreams = list(set(all_dreams_ids) - set(user_dreams_ids))
-            response = self.client.post(reverse('users:login'), {'username' : username,
+            response = self.client.post(reverse('auth_login'), {'username' : username,
                                                             'password' : 'password' + username})
             # own dreams should be available
             for dream_id in user_dreams_ids:
@@ -162,7 +165,7 @@ class ViewsTests(DreamsTests):
     def test_login_view(self):
         self.create_env()
 
-        for url in [ 'users:login']:
+        for url in [ 'auth_login']:
             response = self.client.get(reverse(url))
             form = AuthenticationForm()
             self.assertEquals(response.status_code, 200)
@@ -175,7 +178,7 @@ class ViewsTests(DreamsTests):
                 self.assertTrue(login_result, msg=str(login_result))
                 # check redirect on home page
                 user_id = User.objects.get(username=username).id
-                response = self.client.post(reverse('users:login'), {'username' : username,
+                response = self.client.post(reverse('auth_login'), {'username' : username,
                                                                     'password' : 'password' + username})
                 self.assertRedirects(response, reverse('users:home'), msg_prefix=str(response))
                 # check user home page
@@ -206,25 +209,25 @@ class ViewsTests(DreamsTests):
 
 
 
-
-class MySeleniumTests(LiveServerTestCase):
-    fixtures = ['user-data.json']
-
-    @classmethod
-    def setUpClass(cls):
-        super(MySeleniumTests, cls).setUpClass()
-        cls.selenium = WebDriver()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super(MySeleniumTests, cls).tearDownClass()
-
-    def test_login(self):
-
-        self.selenium.get('%s%s' % (self.live_server_url, '/login/'))
-        username_input = self.selenium.find_element_by_name("username")
-        username_input.send_keys('myuser')
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('secret')
-        self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
+#
+# class MySeleniumTests(LiveServerTestCase):
+#     fixtures = ['user-data.json']
+#
+#     @classmethod
+#     def setUpClass(cls):
+#         super(MySeleniumTests, cls).setUpClass()
+#         cls.selenium = WebDriver()
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         cls.selenium.quit()
+#         super(MySeleniumTests, cls).tearDownClass()
+#
+#     def test_login(self):
+#
+#         self.selenium.get('%s%s' % (self.live_server_url, '/login/'))
+#         username_input = self.selenium.find_element_by_name("username")
+#         username_input.send_keys('myuser')
+#         password_input = self.selenium.find_element_by_name("password")
+#         password_input.send_keys('secret')
+#         self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()

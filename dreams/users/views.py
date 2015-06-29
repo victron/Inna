@@ -32,44 +32,36 @@ from django.contrib.auth.models import User
 #         form = AuthenticationForm()
 #     return render(request, 'users/login.html', {'form' : form})
 
-# from standart django.contrib.auth
-def login(request):
-    template_response = views.login(request)
-    # Do something with `template_response`
-    return template_response
-
-def logout(request):
-    template_response = views.logout(request, template_name='user:welcome',)
-    return template_response
+ # below views done by django-registration-redux
+# def register(request):
+#     form = UserCreationForm()
+#     if request.method == 'POST':
+#         data = request.POST.copy()
+#         # errors = form.clean_password2()
+#         form = UserCreationForm(data=request.POST)
+#         if form.is_valid():
+#             new_user = form.save()
+#             return HttpResponseRedirect(reverse('users:login'))
+#     return render(request, 'users/registration.html', {'form' : form})
+#
+# # from standart django.contrib.auth
+# def login(request):
+#     template_response = views.login(request)
+#     # Do something with `template_response`
+#     return template_response
+#
+# def logout(request):
+#     template_response = views.logout(request, template_name='user:welcome',)
+#     return template_response
 
 @login_required
 def home(request):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('users:login'))
+        return HttpResponseRedirect(reverse('login'))
     return render(request, 'users/home.html', {'user' : request.user})
 
 def welcome(request):
     return render(request, 'users/welcome.html')
-
-
-
-
-
-
-def register(request):
-    form = UserCreationForm()
-    if request.method == 'POST':
-        data = request.POST.copy()
-        # errors = form.clean_password2()
-        form = UserCreationForm(data=request.POST)
-        if form.is_valid():
-            new_user = form.save()
-            return HttpResponseRedirect(reverse('users:login'))
-    return render(request, 'users/registration.html', {'form' : form})
-
-
-def create_dream(request):
-    pass
 
 
 ####################### classes for login and Checking Ownership
@@ -86,21 +78,17 @@ class DreamsOwnerMixin(object):
         """Returns the object the view is displaying.
 
         """
-
         if queryset is None:
             queryset = self.get_queryset()
-
         pk = self.kwargs.get(self.pk_url_kwarg, None)
         queryset = queryset.filter(
             pk=pk,
             user=self.request.user,
         )
-
         try:
             obj = queryset.get()
         except ObjectDoesNotExist:
             raise PermissionDenied
-
         return obj
 
 ###########################################################
@@ -132,7 +120,7 @@ class CreateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, gen
     success_url = reverse_lazy('users:dreams')
     # form_class = forms.NewDreamForm
     success_message = "Dream %(dream_subject)s was created successfully"
-    fields = ['dream_subject', 'dream_text', 'dream_date']
+    fields = ['dream_subject', 'dream_text']
 
 
     # def get_success_url(self):

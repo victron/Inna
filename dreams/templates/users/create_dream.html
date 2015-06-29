@@ -13,10 +13,10 @@
         <h3>Please enter correct data:</h3>
       <p class="error"> {{ form.errors }}</p>
     {% endif %}
-
-    <label for="id_dream_subject">Subject:</label> {{ form.dream_subject }}
-    <label for="id_dream_text">Text:</label> {{ form.dream_text }}
-    <label for="id_dream_date">Date:</label> {{ form.dream_date }}
+    {{ form.as_p }}
+    <label for="id_dream_subject">Subject:</label>
+    <label for="id_dream_text">Text:</label>
+{#    <label for="id_dream_date">Date:</label> {{ form.dream_date }}#}
     <input type="submit" value="Confirm" />
   </form>
 
