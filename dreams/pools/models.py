@@ -32,3 +32,5 @@ class Dreams(models.Model):
                 'user' : self.user,
                 })
 
+
+

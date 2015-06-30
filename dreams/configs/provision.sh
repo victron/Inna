@@ -24,5 +24,6 @@ apt-get install -y postfix
 apt-get install -y mailutils
 #virtual_alias_maps = hash:/etc/postfix/virtual
 
-# pip install paramiko PyYAML Jinja2 httplib2
+pip install selenium
+
 

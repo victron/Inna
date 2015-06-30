@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'registration',
     'pools',
     'users',
+    'axes',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.FailedLoginMiddleware',
 )
 
 ROOT_URLCONF = 'dreams.urls'
@@ -122,4 +124,8 @@ DEFAULT_FROM_EMAIL = 'workorbit@example.com'
 # if DEBUG:
 #     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # send e-mail to console, for develop
 SITE_ID = 1
-AUTH_USER_EMAIL_UNIQUE = True
+# AUTH_USER_EMAIL_UNIQUE = True
+
+AXES_LOGIN_FAILURE_LIMIT = 3
+AXES_LOCK_OUT_AT_FAILURE = True
+

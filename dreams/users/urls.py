@@ -20,3 +20,4 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/delete_dream$', views.DeleteDreamView.as_view(), name='delete_dream'),
 
 ]
+

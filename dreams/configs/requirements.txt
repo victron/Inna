@@ -2,4 +2,7 @@
 Django
 django-registration-redux
 ipython
+psycopg2
+django-axes
+#selenium
 
