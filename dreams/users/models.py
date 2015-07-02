@@ -11,6 +11,9 @@ class Dreams(models.Model):
     dream_date = models.DateTimeField('morning date',  auto_now_add=True, auto_now=False )
     user = models.ForeignKey(User)
 
+    def is_upperclass(self):
+        return self.dream_tag_weight in (self.JUNIOR, self.SENIOR)
+
     def __str__(self):
         return unicode({'dream_subject' : self.dream_subject,
                 'dream_text' : self.dream_text,
@@ -23,12 +26,21 @@ class D_Tags(models.Model):
     d_tag = models.CharField('Dream tag', max_length=255)
     d_description = models.TextField('Dream tag description')
 
+    def __str__(self):
+        return unicode(self.d_tag)
+
 
 class Dreams_D_Tags(models.Model):
-    WEIGHT_CHOISES = ((1, '1'), (2, '2'), (3, '3'), (4, '4') , (5, '5'))
+    WEIGHT_CHOISES = ((1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'))
     dream_tag_weight = models.IntegerField(choices=WEIGHT_CHOISES, default=5)
-    dream_tag_id = models.ManyToManyField(D_Tags)
-    dream_id = models.ManyToManyField(Dreams)
+    dream_tag_id = models.ForeignKey(D_Tags)
+    dream_id = models.ForeignKey(Dreams)
+
+    # def __str__(self):
+    #     return unicode({'dream_tag_weight' : self.dream_tag_weight,
+    #             'dream_tag_id' : self.dream_tag_id,
+    #             'dream_id' : self.dream_id,
+    #             })
 
 # ---------------- Event model ----------------------
 

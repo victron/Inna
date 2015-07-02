@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django import forms
 import forms
+from .forms import *
 # Create your views here.
 from django.views import generic
 from django.contrib import messages
@@ -14,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 # from django.contrib.auth import views as auth_views
 
-from models import Dreams
+from models import Dreams, Dreams_D_Tags, D_Tags
 from django.contrib.auth.models import User
 # from django.contrib.auth.decorators import
 
@@ -121,7 +122,7 @@ class CreateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, gen
     # form_class = forms.NewDreamForm
     success_message = "Dream %(dream_subject)s was created successfully"
     fields = ['dream_subject', 'dream_text']
-
+    # fields = [ 'dream_tag_weight']
 
     # def get_success_url(self):
     #     return reverse('users:dreams')
@@ -129,6 +130,49 @@ class CreateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, gen
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(CreateDreamtView, self).form_valid(form)
+
+class CreateDreamtView2( generic.CreateView):
+
+    # model = Dreams
+    # form_class = Dreams_D_TagsForm
+    form_class = DreamForm
+    template_name = 'users/create_dream.html'
+    success_url = reverse_lazy('users:dreams')
+    # form_class = forms.NewDreamForm
+    success_message = "Dream %(dream_subject)s was created successfully"
+    # fields = ['dream_subject', 'dream_text']
+    def get(self, request, *args, **kwargs):
+        """
+        Handles GET requests and instantiates blank versions of the form
+        and its inline formsets.
+        """
+        # self.object = None
+        # form = self.get_form(form_class)
+        # ingredient_form = IngredientFormSet()
+        # instruction_form = InstructionFormSet()
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return self.render_to_response(
+            self.get_context_data(form=form, dream_form=DreamForm, tag_form=Dreams_D_TagsForm))
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return self.form_valid(form)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        tag = Dreams_D_Tags()
+        tag.dream_tag_weight=self.request.POST.get('dream_tag_weight')
+        tag.dream_tag_id = D_Tags.objects.get(id=self.request.POST.get('dream_tag_id'))
+        self.object = form.save()
+        # save dream and then can get dream id from object
+        tag.dream_id=self.object
+        tag.save()
+        return HttpResponseRedirect(self.get_success_url())
+        # return super(CreateDreamtView2, self).form_valid(tag)
 
 class UpdateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, generic.UpdateView):
 
