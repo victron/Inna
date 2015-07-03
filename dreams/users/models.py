@@ -26,8 +26,10 @@ class D_Tags(models.Model):
     d_tag = models.CharField('Dream tag', max_length=255)
     d_description = models.TextField('Dream tag description')
 
-    def __str__(self):
-        return unicode(self.d_tag)
+    # def __str__(self):
+    #     return unicode({'d_tag' : self.d_tag,
+    #                     'd_description' : self.d_description,
+    #                     })
 
 
 class Dreams_D_Tags(models.Model):

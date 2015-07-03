@@ -113,6 +113,15 @@ class DreamDetails(LoggedInMixin, DreamsOwnerMixin, generic.DetailView):
     template_name = 'users/dream.html'
     context_object_name = 'dream_details'
 
+    def get_context_data(self, **kwargs):
+        """
+        This has been overridden to add `tags` to the templates context,
+        so you can use {{ tags }} etc. within the template
+        """
+        context = super(DreamDetails, self).get_context_data(**kwargs)
+        context["tags"] = Dreams_D_Tags.objects.filter(dream_id=self.object)
+        return context
+
 
 class CreateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, generic.CreateView):
 

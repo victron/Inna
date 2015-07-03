@@ -5,7 +5,15 @@
         <li>dream_text ----- {{ dream_details.dream_text }}</li>
         <li>dream_date ----- {{ dream_details.dream_date }}</li>
         <li>user ----------- {{ dream_details.user }}</li>
+        <li>tag ------------ {{ tags.dream_tag_id }}</li>
 {#    {% endfor %}#}
+    </ul>
+    {% if tags %}
+        <ul>Tags
+            {% for i in tags %}
+                <li>{{ i.dream_tag_id.d_tag }} ---- {{ i.dream_tag_weight }} === {{ i.dream_tag_id.d_description }}</li>
+            {% endfor %}
+    {% endif %}
     </ul>
 {% else %}
     <p>No dream</p>
