@@ -162,8 +162,11 @@ class CreateDreamtView2( generic.CreateView):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
+        tag_forms = []
+        for i in range(2):
+            tag_forms.append(Dreams_D_TagsForm)
         return self.render_to_response(
-            self.get_context_data(form=form, dream_form=DreamForm, tag_form=Dreams_D_TagsForm))
+            self.get_context_data(form=form, dream_form=DreamForm, tag_forms=tag_forms))
 
     def post(self, request, *args, **kwargs):
         self.object = None

@@ -6,14 +6,16 @@ from django.core.exceptions import ValidationError
 from models import Dreams, Dreams_D_Tags
 
 
-# class DreamForm(ModelForm):
-#     class Meta:
-#         model = Dreams
-#         exclude = ('dream_date', 'user', )
+class Dreams_D_TagsForm(ModelForm):
+    class Meta:
+        model = Dreams_D_Tags
+        fields = ['dream_tag_weight', 'tag']
+        # exclude = ('dream_id', )
 
 DreamForm = modelform_factory(Dreams, exclude=('user', ))
 
-Dreams_D_TagsForm = modelform_factory(Dreams_D_Tags, exclude=('dream_id',))
+# Dreams_D_TagsForm = modelform_factory(Dreams_D_Tags, exclude=('dream_id',))
+
 
 
 
