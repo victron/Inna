@@ -29,6 +29,15 @@ class Dreams_D_TagsForm(ModelForm):
 #     # dream_tag_weight = forms.ModelChoiceField(queryset=Color.objects.all())
 #     tag = MyModelChoiceField_d_tag(queryset=D_Tags.objects.all())
 
+# NewTagFormSet = inlineformset_factory(D_Tags, Dreams_D_Tags, form=Dreams_D_TagsForm, exclude = ('dream_id', ))
+
+class tagFormSet(forms.formsets.BaseFormSet):
+    def clean(self):
+        if not self.is_valid():
+            raise ValidationError(self.errors)
+
+Dreams_D_TagsFormSet = forms.formset_factory(Dreams_D_TagsForm, extra=2, formset=tagFormSet)
+
 DreamForm = modelform_factory(Dreams, exclude=('user', ))
 
 # Dreams_D_TagsForm = modelform_factory(Dreams_D_Tags, exclude=('dream_id',))

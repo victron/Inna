@@ -13,12 +13,12 @@
         <h3>Please enter correct data:</h3>
       <p class="error"> {{ form.errors }}</p>
     {% endif %}
+    {% if tag_forms.errors %}
+        <h3>Please enter correct data in tag:</h3>
+    {% endif %}
 {#    {{ form.as_p }}#}
     {{ dream_form.as_p }}
   {{ tag_forms }}
-{#  {% for i in tag_forms %}#}
-{#    {{ i }}#}
-{#  {% endfor %}#}
 {#    <label for="id_dream_subject">Subject:</label>#}
 {#    <label for="id_dream_text">Text:</label>#}
 {#    <label for="id_dream_date">Date:</label> {{ form.dream_date }}#}
