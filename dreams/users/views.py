@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django import forms
+# from django import forms
 import forms
 from .forms import *
 # Create your views here.
@@ -162,9 +162,11 @@ class CreateDreamtView2( generic.CreateView):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        tag_forms = []
-        for i in range(2):
-            tag_forms.append(Dreams_D_TagsForm)
+        tag_forms = Dreams_D_TagsForm
+        # tag_forms = []
+        # for i in range(1):
+        #     form_tag = Dreams_D_TagsForm
+        #     tag_forms.append(form_tag)
         return self.render_to_response(
             self.get_context_data(form=form, dream_form=DreamForm, tag_forms=tag_forms))
 
@@ -178,7 +180,8 @@ class CreateDreamtView2( generic.CreateView):
         form.instance.user = self.request.user
         tag = Dreams_D_Tags()
         tag.dream_tag_weight=self.request.POST.get('dream_tag_weight')
-        tag.dream_tag_id = D_Tags.objects.get(id=self.request.POST.get('dream_tag_id'))
+        d_tags = D_Tags.objects.get(id=self.request.POST.get('tag'))
+        tag.dream_tag_id = d_tags
         self.object = form.save()
         # save dream and then can get dream id from object
         tag.dream_id=self.object
