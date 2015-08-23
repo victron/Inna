@@ -37,17 +37,18 @@ class D_Tags(models.Model):
 class Dreams_D_Tags(models.Model):
     WEIGHT_CHOISES = ((1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'))
     dream_tag_weight = models.IntegerField('weight', choices=WEIGHT_CHOISES, default=5)
-    dream_tag_id = models.ForeignKey(D_Tags, name='tag')
     dream_id = models.ForeignKey(Dreams)
+    dream_tag_id = models.ForeignKey(D_Tags, verbose_name = "tag")
+
 
     def text(self):
         return unicode(self.dream_tag_id)
 
-    # def __str__(self):
-    #     return unicode({'dream_tag_weight' : self.dream_tag_weight,
-    #             'dream_tag_id' : self.dream_tag_id,
-    #             'dream_id' : self.dream_id,
-    #             })
+    def __str__(self):
+        return unicode({'dream_tag_weight' : self.dream_tag_weight,
+                'dream_tag_id' : self.dream_tag_id,
+                'dream_id' : self.dream_id,
+                })
 
 # ---------------- Event model ----------------------
 

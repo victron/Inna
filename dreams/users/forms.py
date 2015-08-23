@@ -8,6 +8,10 @@ from models import Dreams, Dreams_D_Tags, D_Tags
 # https://docs.djangoproject.com/en/1.8/ref/forms/fields/#modelchoicefield
 # This method will receive a model object, and should return a string suitable for representing it
 # instead __str__ in model
+# later need to check, because Note that the default widget for ModelChoiceField becomes
+# impractical when the number of entries increases. You should avoid using it for more
+# than 100 items.
+
 class MyModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return "My Object #%i" % obj.id
@@ -20,8 +24,8 @@ class Dreams_D_TagsForm(ModelForm):
     tag = MyModelChoiceField_d_tag(queryset=D_Tags.objects.all())
     class Meta:
         model = Dreams_D_Tags
-        # fields = ['dream_tag_weight', 'tag']
-        exclude = ('dream_id', )
+        fields = ['dream_tag_weight', 'tag']
+        # exclude = ('dream_id', )
 
 # class Dreams_D_TagsForm(forms.Form):
 #

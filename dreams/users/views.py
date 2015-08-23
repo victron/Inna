@@ -141,8 +141,9 @@ class CreateDreamtView(LoggedInMixin, DreamsOwnerMixin, SuccessMessageMixin, gen
         return super(CreateDreamtView, self).form_valid(form)
 
 class CreateDreamtView2( generic.CreateView):
+# good example http://stackoverflow.com/questions/27876644/django-class-based-createview-and-updateview-with-multiple-inline-formsets
 
-    # model = Dreams
+    model = Dreams
     # form_class = Dreams_D_TagsForm
     form_class = DreamForm
     template_name = 'users/create_dream.html'
@@ -164,27 +165,31 @@ class CreateDreamtView2( generic.CreateView):
         form = self.get_form(form_class)
         tag_forms = Dreams_D_TagsFormSet
         return self.render_to_response(
-            self.get_context_data(dream_form=DreamForm, tag_forms=tag_forms))
+            self.get_context_data( dream_form=form, tag_forms=tag_forms))
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        return self.form_valid(form)
+        # form_class = self.get_form_class()
+        # form = self.get_form(form_class)
+        # form.instance.user = self.request.user
+        dream_form = DreamForm(self.request.POST)
+        tag_forms = Dreams_D_TagsFormSet(self.request.POST)
+        if (dream_form.is_valid() and tag_forms.is_valid()):
+            return self.form_valid_non_default(dream_form, tag_forms)
+        else:
+            return self.form_invalid(dream_form)
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        tag = Dreams_D_Tags()
-        dream_tag_weight_list = self.request.POST.get('dream_tag_weight')
-        tag_list = self.request.POST.get('tag')
 
-        tag.dream_tag_weight=self.request.POST.get('dream_tag_weight')
-        d_tags = D_Tags.objects.get(id=self.request.POST.get('tag'))
-        tag.dream_tag_id = d_tags
-        self.object = form.save()
-        # save dream and then can get dream id from object
-        tag.dream_id=self.object
-        tag.save()
+    def form_valid_non_default(self, dream_form, tag_forms ):
+        dream_form.instance.user = self.request.user
+        self.object = dream_form.save()
+        for form in tag_forms.cleaned_data:
+            tag = Dreams_D_Tags()
+            tag.dream_tag_weight= form['dream_tag_weight']
+            tag.dream_tag_id = form['tag']
+            tag.dream_id = self.object
+            tag.save()
+
         return HttpResponseRedirect(self.get_success_url())
         # return super(CreateDreamtView2, self).form_valid(tag)
 
