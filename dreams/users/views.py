@@ -177,18 +177,22 @@ class CreateDreamtView2( generic.CreateView):
         if (dream_form.is_valid() and tag_forms.is_valid()):
             return self.form_valid_non_default(dream_form, tag_forms)
         else:
-            return self.form_invalid(dream_form)
+            return self.form_invalid(dream_form, tag_forms)
 
+    def form_invalid(self, form, tag_forms):
+
+        return self.render_to_response(self.get_context_data(dream_form=form, tag_forms=tag_forms))
 
     def form_valid_non_default(self, dream_form, tag_forms ):
         dream_form.instance.user = self.request.user
         self.object = dream_form.save()
-        for form in tag_forms.cleaned_data:
-            tag = Dreams_D_Tags()
-            tag.dream_tag_weight= form['dream_tag_weight']
-            tag.dream_tag_id = form['tag']
-            tag.dream_id = self.object
-            tag.save()
+        if tag_forms:
+            for form in tag_forms.cleaned_data:
+                tag = Dreams_D_Tags()
+                tag.dream_tag_weight= form['dream_tag_weight']
+                tag.dream_tag_id = form['tag']
+                tag.dream_id = self.object
+                tag.save()
 
         return HttpResponseRedirect(self.get_success_url())
         # return super(CreateDreamtView2, self).form_valid(tag)

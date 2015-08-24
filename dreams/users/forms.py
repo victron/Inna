@@ -22,23 +22,42 @@ class MyModelChoiceField_d_tag(forms.ModelChoiceField):
 
 class Dreams_D_TagsForm(ModelForm):
     tag = MyModelChoiceField_d_tag(queryset=D_Tags.objects.all())
+    error_css_class = 'error'
+    required_css_class = 'required'
     class Meta:
         model = Dreams_D_Tags
         fields = ['dream_tag_weight', 'tag']
         # exclude = ('dream_id', )
 
-# class Dreams_D_TagsForm(forms.Form):
-#
-#     id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-#     # dream_tag_weight = forms.ModelChoiceField(queryset=Color.objects.all())
-#     tag = MyModelChoiceField_d_tag(queryset=D_Tags.objects.all())
-
-# NewTagFormSet = inlineformset_factory(D_Tags, Dreams_D_Tags, form=Dreams_D_TagsForm, exclude = ('dream_id', ))
 
 class tagFormSet(forms.formsets.BaseFormSet):
     def clean(self):
+        # something from http://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html
+
+        # if any(self.errors):
+        #     return
         if not self.is_valid():
             raise ValidationError(self.errors)
+        tags = []
+        duplicates = False
+        for form in self.forms:
+            data = form.is_valid()
+            data1 = form.is_bound
+            weight = form.cleaned_data['dream_tag_weight']
+            tag = form.cleaned_data['tag']
+            if tag in tags:
+                duplicates = True
+                # break
+            tags.append(tag)
+        # tags = [form.cleaned_data['tag'] for form in self.forms]
+        # duplicates = True if tag in tags else False
+            if duplicates:
+                raise forms.ValidationError('tags must be unique', code='duplicate_tags')
+            # if weight and not tag:
+            #     raise forms.ValidationError('please select tag', code='tag_missing')
+
+
+
 
 Dreams_D_TagsFormSet = forms.formset_factory(Dreams_D_TagsForm, extra=2, formset=tagFormSet)
 
