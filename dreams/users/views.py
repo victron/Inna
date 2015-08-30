@@ -174,6 +174,11 @@ class CreateDreamtView2( generic.CreateView):
         # form.instance.user = self.request.user
         dream_form = DreamForm(self.request.POST)
         tag_forms = Dreams_D_TagsFormSet(self.request.POST)
+        if 'add_tag' in request.POST:
+            tag_forms = forms.formset_factory(Dreams_D_TagsForm, extra=int(request.POST['form-TOTAL_FORMS']) + 1, formset=tagFormSet)
+            return self.render_to_response(
+            self.get_context_data( dream_form=dream_form, tag_forms=tag_forms))
+            # return self.form_invalid(dream_form, tag_forms)
         if (dream_form.is_valid() and tag_forms.is_valid()):
             return self.form_valid_non_default(dream_form, tag_forms)
         else:

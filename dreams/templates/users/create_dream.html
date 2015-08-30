@@ -19,6 +19,7 @@
 {#    {{ form.as_p }}#}
     {{ dream_form.as_p }}
   {{ tag_forms.non_form_errors }}
+  {{ tag_forms.management_form }}
 {#  alternative to above#}
 {#  {% if tag_forms.non_form_errors %}#}
 {#      <ul>#}
@@ -31,11 +32,23 @@
 {##}
 {#  {% endif %}#}
 {#  {{ tag_forms.as_p }}#}
-  {% for form in tag_forms %}
-    <p>
-        {{ form }}
-    </p>
-  {% endfor %}
+{#  {% for form in tag_forms %}#}
+{#    <p>#}
+{#        {{ form }}#}
+{#    </p>#}
+{#  {% endfor %}#}
+  <fieldset>
+      <legend>tags</legend>
+        {{ tag_forms.non_form_errors }}
+        {{ tag_forms.management_form }}
+        {% for form in tag_forms %}
+          <p>
+            {{ form }}
+          <input title="delete tag" type="submit" name="remove_tag" value="remove">
+          </p>
+        {% endfor %}
+    <input title="add tag" type="submit" name="add_tag" value="add">
+  </fieldset>
 {#    <label for="id_dream_subject">Subject:</label>#}
 {#    <label for="id_dream_text">Text:</label>#}
 {#    <label for="id_dream_date">Date:</label> {{ form.dream_date }}#}

@@ -65,7 +65,7 @@ class tagFormSet(forms.formsets.BaseFormSet):
 
 
 
-Dreams_D_TagsFormSet = forms.formset_factory(Dreams_D_TagsForm, extra=2, formset=tagFormSet)
+Dreams_D_TagsFormSet = forms.formset_factory(Dreams_D_TagsForm, extra=1, formset=tagFormSet)
 
 DreamForm = modelform_factory(Dreams, exclude=('user', ))
 
