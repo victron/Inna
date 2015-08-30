@@ -31,30 +31,37 @@ class Dreams_D_TagsForm(ModelForm):
 
 
 class tagFormSet(forms.formsets.BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        #http://stackoverflow.com/questions/2406537/django-formsets-make-first-required/2422221#2422221
+        # for error generation for empty fields in form
+        super(tagFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted = False
+
     def clean(self):
         # something from http://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html
 
-        # if any(self.errors):
-        #     return
-        if not self.is_valid():
-            raise ValidationError(self.errors)
-        tags = []
-        duplicates = False
-        for form in self.forms:
-            data = form.is_valid()
-            weight = form.cleaned_data['dream_tag_weight']
-            tag = form.cleaned_data['tag']
-            if tag in tags:
-                duplicates = True
-                # break
-            tags.append(tag)
-        # tags = [form.cleaned_data['tag'] for form in self.forms]
-        # duplicates = True if tag in tags else False
-            if duplicates:
-                raise ValidationError('tags must be unique', code='duplicate_tags')
-            # if weight and not tag:
-            #     raise forms.ValidationError('please select tag', code='tag_missing')
-        return self.cleaned_data
+        if any(self.errors):
+            return
+        tags = [form.cleaned_data['tag'] for form in self.forms]
+        duplicates = True if len(tags) != len(set(tags)) else False
+        if duplicates:
+            raise ValidationError('tags must be unique', code='duplicate_tags')
+        # ------- equal to above code --------
+        # tags = []
+        # duplicates = False
+        # for form in self.forms:
+        #     if form.is_valid():
+        #         # weight = form.cleaned_data['dream_tag_weight']
+        #         tag = form.cleaned_data['tag']
+        #         if tag in tags:
+        #             duplicates = True
+        #         tags.append(tag)
+        #         if duplicates:
+        #             raise ValidationError('tags must be unique', code='duplicate_tags')
+        # ============================================================================
+
+
 
 
 
