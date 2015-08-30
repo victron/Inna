@@ -30,7 +30,12 @@
 {#      </ul>#}
 {##}
 {#  {% endif %}#}
-  {{ tag_forms.as_p }}
+{#  {{ tag_forms.as_p }}#}
+  {% for form in tag_forms %}
+    <p>
+        {{ form }}
+    </p>
+  {% endfor %}
 {#    <label for="id_dream_subject">Subject:</label>#}
 {#    <label for="id_dream_text">Text:</label>#}
 {#    <label for="id_dream_date">Date:</label> {{ form.dream_date }}#}
