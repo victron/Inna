@@ -18,6 +18,16 @@
     {% endif %}
 {#    {{ form.as_p }}#}
     {{ dream_form.as_p }}
+  {% if tag_forms.non_form_errors %}
+      <ul>
+        <li>
+            {% for error in tag_forms.non_form_errors %}
+                {{ error|escape }}
+            {% endfor %}
+        </li>
+      </ul>
+
+  {% endif %}
   {{ tag_forms }}
 {#    <label for="id_dream_subject">Subject:</label>#}
 {#    <label for="id_dream_text">Text:</label>#}

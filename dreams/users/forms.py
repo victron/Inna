@@ -42,7 +42,6 @@ class tagFormSet(forms.formsets.BaseFormSet):
         duplicates = False
         for form in self.forms:
             data = form.is_valid()
-            data1 = form.is_bound
             weight = form.cleaned_data['dream_tag_weight']
             tag = form.cleaned_data['tag']
             if tag in tags:
@@ -52,10 +51,10 @@ class tagFormSet(forms.formsets.BaseFormSet):
         # tags = [form.cleaned_data['tag'] for form in self.forms]
         # duplicates = True if tag in tags else False
             if duplicates:
-                raise forms.ValidationError('tags must be unique', code='duplicate_tags')
+                raise ValidationError('tags must be unique', code='duplicate_tags')
             # if weight and not tag:
             #     raise forms.ValidationError('please select tag', code='tag_missing')
-
+        return self.cleaned_data
 
 
 
