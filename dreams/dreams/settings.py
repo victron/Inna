@@ -110,7 +110,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-STATIC_URL = '/static/'
 LOGIN_URL = 'auth_login'
 LOGIN_REDIRECT_URL = 'users:home'
 LOGOUT_REDIRECT_URL = 'users:welcome'
@@ -128,4 +127,11 @@ SITE_ID = 1
 
 AXES_LOGIN_FAILURE_LIMIT = 3
 AXES_LOCK_OUT_AT_FAILURE = True
+
+STATIC_URL = '/static/'
+# Set the STATIC_ROOT setting to the directory from which you'd like to serve these files, for example:
+# STATIC_ROOT = "/var/www/example.com/static/"
+# Run the collectstatic management command:
+# $ python manage.py collectstatic
+# This will copy all files from your static folders into the STATIC_ROOT directory.
 

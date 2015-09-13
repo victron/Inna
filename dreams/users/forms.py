@@ -40,7 +40,6 @@ class tagFormSet(forms.formsets.BaseFormSet):
 
     def clean(self):
         # something from http://whoisnicoleharris.com/2015/01/06/implementing-django-formsets.html
-
         if any(self.errors):
             return
         tags = [form.cleaned_data['tag'] for form in self.forms]
